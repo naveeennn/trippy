@@ -17,7 +17,8 @@ people you're meeting before you're late. Reasoning: NVIDIA Nemotron on Nebius.
 
 | | |
 |---|---|
-| **Demo video (1:59)** | [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4) |
+| **Track** | Best Apps and Agents |
+| **Demo video (2:27)** | YouTube: _link added after upload_ · file: [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4) (includes real footage of the app running) |
 | **Live demo** | https://tripowner.onrender.com (public demo mode, nothing is sent) |
 | **NVIDIA model** | Nemotron 3 Super, `nvidia/nemotron-3-super-120b-a12b` |
 | **Runs on** | Nebius Token Factory (OpenAI-compatible API), see [How we use NVIDIA Nemotron and Nebius](#how-we-use-nvidia-nemotron-and-nebius) |
@@ -383,6 +384,13 @@ Reproduce: `python -m tripowner.sim.eval --trips 200 --seed 42 --llm --driver po
   isn't limited to a phrasebook.
 - Model: `nvidia/nemotron-3-super-120b-a12b` via the OpenAI-compatible Token Factory API (`tripowner/llm.py`).
   Self-hosting it as a NIM on a Nebius GPU VM is documented in [docs/nebius_nim.md](docs/nebius_nim.md).
+- **Where Token Factory sped us up:** no GPUs to provision or models to host, so we went from the first call to a
+  tool-calling agent in an afternoon, using the standard OpenAI client. Pay-per-token pricing let us run the 30-trip
+  Nemotron eval for $0.087 and keep the public demo on Nemotron with a small daily budget. Because Super is fast
+  enough for live use (median 1.6 s), the same model handles chat, cancellations, translation and live phone calls,
+  so we never had to maintain a second model.
+- **Other Nebius services:** none at runtime. The live demo is hosted on Render; Nebius AI Cloud (a NIM on a GPU VM)
+  is documented as the self-hosted option but not what the demo runs on.
 
 ## Architecture
 
@@ -477,6 +485,9 @@ The demo runs one trip at a time and every viewer sees the same run, so it suits
 - **Indian languages:** Super translated our driver replies with the meaning intact (about 2 s a line). Nemotron 3
   Nano was slower for us (3.4 s median) and once turned "pick me up" into "I'll pick you up", so we use Super for
   both jobs. Kannada output still has occasional odd word choices, so we use Sarvam for speech.
+- **Nebius AI Cloud:** we documented running Nemotron as a NIM on a Nebius GPU VM ([docs/nebius_nim.md](docs/nebius_nim.md))
+  but stayed on Token Factory, since pay-per-token was enough for a demo-scale agent. A one-click path from a Token
+  Factory model to a Serverless Endpoint with the same API would make that move easy when traffic grows.
 - **What we'd want next:** a small, fast Nemotron tuned for tool calling in voice loops, better Kannada and other
   Indian languages, and per-request latency and token figures in the Token Factory dashboard to compare models.
 

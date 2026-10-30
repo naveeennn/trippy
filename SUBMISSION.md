@@ -6,8 +6,8 @@ Everything the submission form asks for, in one place. Code, tests and proof rep
 |---|---|
 | **Project** | TripOwner |
 | **Elevator pitch** | It doesn't just book your cab. It owns the trip until you arrive. |
-| **Track** | Personal AI (an agent that acts for one person: their calendar, their rides, their phone) |
-| **Demo video** | 1:59, [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4) (also on YouTube: add the link here after uploading) |
+| **Track** | Best Apps and Agents: an agent people would actually use, powered by Nemotron on Nebius Token Factory |
+| **Demo video** | 2:27 on YouTube: _link added after upload_. Also in the repo: [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4). The last section is real footage of the app running a trip. |
 | **Live demo** | https://tripowner.onrender.com (public demo mode: rides simulated, nothing is sent) |
 | **Repository** | https://github.com/naveeennn/trippy (MIT) |
 | **NVIDIA open model** | Nemotron 3 Super, `nvidia/nemotron-3-super-120b-a12b` |
@@ -73,6 +73,12 @@ speech-to-text, text-to-speech and translation; Twilio for phone calls; the Tele
 signed buyer app; OpenStreetMap data and OSRM for routes; Docker on Render for the live demo. 140 offline tests run
 in CI, plus a call bench that rehearses 30 driver scenarios against the call agent.
 
+## Testing
+
+- **Live demo:** https://tripowner.onrender.com, free and open, no login. Free hosting sleeps when idle, so the first
+  load can take up to a minute.
+- **Locally:** the steps under [Run it](#run-it); no keys needed. `python -m pytest -q` runs the tests offline.
+
 ## Built during the hackathon
 
 TripOwner was started from scratch during the submission period: the first commit is on 21 October 2026, and
@@ -92,7 +98,13 @@ everything in this repository was built between then and 30 October 2026.
 ONDC registration so Namma Yatri bookings go live, an Indian phone number (for example from Exotel) so it can
 answer forwarded calls, and more cities beyond Bengaluru.
 
-## Feedback on Nebius Token Factory and NVIDIA tools
+## Where Token Factory sped us up
+
+See [How we use NVIDIA Nemotron and Nebius](README.md#how-we-use-nvidia-nemotron-and-nebius): no GPUs to run, the
+standard OpenAI client, pay-per-token evaluation ($0.087 for 30 trips), and one model fast enough for chat,
+translation and live calls.
+
+## Feedback on Nebius Token Factory, AI Cloud and NVIDIA tools
 
 See [the feedback section of the README](README.md#feedback-on-nebius-token-factory-and-nvidia-tools).
 
