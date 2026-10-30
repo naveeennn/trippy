@@ -18,7 +18,7 @@ people you're meeting before you're late. Reasoning: NVIDIA Nemotron on Nebius.
 | | |
 |---|---|
 | **Track** | Best Apps and Agents |
-| **Demo video (2:27)** | YouTube: _link added after upload_ · file: [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4) (includes real footage of the app running) |
+| **Demo video (2:58)** | YouTube: https://youtu.be/-XViHnzgjlA · file: [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4) (includes real footage of the app running) |
 | **Live demo** | https://tripowner.onrender.com (public demo mode, nothing is sent) |
 | **NVIDIA model** | Nemotron 3 Super, `nvidia/nemotron-3-super-120b-a12b` |
 | **Runs on** | Nebius Token Factory (OpenAI-compatible API), see [How we use NVIDIA Nemotron and Nebius](#how-we-use-nvidia-nemotron-and-nebius) |

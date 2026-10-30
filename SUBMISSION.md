@@ -7,7 +7,7 @@ Everything the submission form asks for, in one place. Code, tests and proof rep
 | **Project** | TripOwner |
 | **Elevator pitch** | It doesn't just book your cab. It owns the trip until you arrive. |
 | **Track** | Best Apps and Agents: an agent people would actually use, powered by Nemotron on Nebius Token Factory |
-| **Demo video** | 2:27 on YouTube: _link added after upload_. Also in the repo: [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4). The last section is real footage of the app running a trip. |
+| **Demo video** | 2:58 on YouTube: https://youtu.be/-XViHnzgjlA. Also in the repo: [media/TripOwner_demo.mp4](media/TripOwner_demo.mp4). It includes a real phone call from 0:37, and real footage of the app running a trip. |
 | **Live demo** | https://tripowner.onrender.com (public demo mode: rides simulated, nothing is sent) |
 | **Repository** | https://github.com/naveeennn/trippy (MIT) |
 | **NVIDIA open model** | Nemotron 3 Super, `nvidia/nemotron-3-super-120b-a12b` |
