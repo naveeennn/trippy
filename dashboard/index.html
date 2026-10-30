@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TripOwner</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --panel: #ffffff; --ink: #14161a; --muted: #6b7280; --line: #e5e7eb;
+    --accent: #76b900; --accent-ink: #ffffff; --blue: #2563eb; --amber: #b45309; --amber-bg: #fef3c7;
+    --red: #b91c1c; --red-bg: #fee2e2; --green: #15803d; --green-bg: #dcfce7;
+    --bubble-driver: #eef2f7; --bubble-agent: #e8f5d0; --bubble-user: #eceff3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0f12; --panel: #161a20; --ink: #e8eaed; --muted: #9aa3ae; --line: #262c35;
+      --amber: #fbbf24; --amber-bg: #3a2a07; --red: #f87171; --red-bg: #3b1212;
+      --green: #4ade80; --green-bg: #0f2e1a; --blue: #60a5fa;
+      --bubble-driver: #1f2630; --bubble-agent: #20301a; --bubble-user: #232830;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+           padding: 14px 20px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  .brand { display: flex; align-items: baseline; gap: 10px; }
+  .brand h1 { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
+  .brand span { color: var(--muted); font-size: 13px; }
+  .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge { font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+  .badge.live { color: var(--green); border-color: var(--green); }
+  .controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  select, button { font: inherit; border-radius: 8px; border: 1px solid var(--line); background: var(--panel);
+                   color: var(--ink); padding: 7px 10px; }
+  button { cursor: pointer; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button:disabled { opacity: .5; cursor: default; }
+  main { display: grid; gap: 16px; padding: 16px 20px; grid-template-columns: 340px 1fr 360px; align-items: start; }
+  @media (max-width: 1150px) { main { grid-template-columns: 1fr 1fr; } #evalPanel { grid-column: 1 / -1; } }
+  @media (max-width: 720px) { main { grid-template-columns: 1fr; padding: 12px 16px; } header { padding: 12px 16px; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; min-width: 0; }
+  .panel h2 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .clock { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .meeting { margin: 4px 0 12px; }
+  .meeting b { font-size: 16px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 12px 0; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .chip { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .chip.ok { background: var(--green-bg); color: var(--green); }
+  .chip.late { background: var(--red-bg); color: var(--red); }
+  .chip.warn { background: var(--amber-bg); color: var(--amber); }
+  .steps { display: flex; gap: 4px; margin-top: 12px; }
+  .steps div { flex: 1; height: 6px; border-radius: 3px; background: var(--line); }
+  .steps div.on { background: var(--accent); }
+  .steps-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; margin-top: 4px; }
+  #timeline { list-style: none; margin: 0; padding: 0; max-height: 52vh; overflow-y: auto; }
+  #timeline li { display: grid; grid-template-columns: 44px 1fr; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); }
+  #timeline li:first-child { border-top: 0; }
+  #timeline .t { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; padding-top: 1px; }
+  #timeline .guard { color: var(--red); }
+  #timeline .notify { color: var(--amber); }
+  #timeline .good { color: var(--green); }
+  #timeline .thought { color: var(--muted); font-style: italic; }
+  #chat { display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto; padding-right: 4px; }
+  .bubble { max-width: 82%; padding: 10px 12px; border-radius: 14px; }
+  .bubble .native { font-size: 16px; }
+  .bubble .en { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .bubble .meta { color: var(--muted); font-size: 11px; margin-bottom: 4px; display: flex; gap: 8px; align-items: center; }
+  .bubble.driver { align-self: flex-start; background: var(--bubble-driver); border-bottom-left-radius: 4px; }
+  .bubble.agent { align-self: flex-end; background: var(--bubble-agent); border-bottom-right-radius: 4px; }
+  .bubble.user { align-self: flex-end; background: var(--bubble-user); border-bottom-right-radius: 4px; }
+  .bubble.blocked { outline: 2px solid var(--red); }
+  .bubble button { padding: 1px 7px; font-size: 11px; }
+  .empty { color: var(--muted); text-align: center; padding: 30px 10px; }
+  .banner { margin-top: 12px; padding: 10px 12px; border-radius: 10px; font-weight: 600; }
+  .banner.ok { background: var(--green-bg); color: var(--green); }
+  .banner.late { background: var(--red-bg); color: var(--red); }
+  .banner.warn { background: var(--amber-bg); color: var(--amber); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 6px 4px; border-top: 1px solid var(--line); }
+  th:first-child, td:first-child { text-align: left; color: var(--muted); font-weight: 400; }
+  thead th { border-top: 0; font-size: 12px; color: var(--muted); }
+  td.win { color: var(--green); font-weight: 700; }
+  .bars { margin: 14px 0; display: grid; gap: 10px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  .bar { height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; }
+  .bar i { display: block; height: 100%; }
+  .assume { color: var(--muted); font-size: 12px; padding-left: 16px; }
+  #modal { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; align-items: center; justify-content: center; padding: 16px; }
+  #modal.open { display: flex; }
+  #modal .card { background: var(--panel); border-radius: 16px; padding: 20px; max-width: 420px; width: 100%; border: 1px solid var(--line); }
+  #modal .card h3 { margin: 0 0 8px; }
+  #modal .card .row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+  #sosBtn { background: #e5484d; border-color: #e5484d; color: #fff; font-weight: 700; }
+  #safetyModal { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: none; align-items: center;
+                 justify-content: center; z-index: 60; }
+  #safetyModal.open { display: flex; }
+  #safetyModal .card { background: var(--panel, #1b1d22); border: 2px solid #e5484d; border-radius: 12px;
+                       padding: 20px; width: min(420px, 92vw); }
+  #safetyModal h3 { margin: 0 0 8px; color: #e5484d; }
+  #safetyModal .row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  #safetyModal .big { flex: 1; padding: 12px; font-size: 15px; }
+  #safetyHelp { background: #e5484d; border-color: #e5484d; color: #fff; }
+  #call112 { display: inline-block; margin-top: 12px; color: #e5484d; font-weight: 700; }
+  #callBar { display: none; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 10px;
+             padding: 10px 12px; border: 1px solid var(--green); border-radius: 10px; font-size: 13px; }
+  #callBar.show { display: flex; }
+  #callBar.ended { border-color: var(--line); color: var(--muted); }
+  #callBar .pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+  #callBar.ended .pulse { background: var(--line); }
+  #callBar button { font-size: 12px; padding: 4px 10px; }
+  .bubble.suggestion { opacity: .65; border-style: dashed; }
+  #livePanel { display: none; }
+  #livePanel.show { display: block; }
+  #livePanel .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+  #liveLog { display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow-y: auto; margin: 8px 0; }
+  #liveLog .ln { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 13px; }
+  #liveLog .ln.agent { border-color: var(--green); }
+  #liveLog .ln .who { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  #liveLog .ln .en { color: var(--muted); font-size: 12px; }
+  #micBtn { min-width: 150px; }
+  #micBtn.rec { background: #e5484d; border-color: #e5484d; color: #fff; }
+  #liveText { flex: 1; min-width: 200px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line);
+              background: transparent; color: inherit; }
+  #liveStatus { font-size: 12px; color: var(--muted); }
+  #routesPanel { display: none; }
+  #routesPanel.show { display: block; }
+  #routesPanel table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  #routesPanel th, #routesPanel td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; }
+  #routesPanel th:first-child, #routesPanel td:first-child { text-align: left; }
+  #routesPanel tr.chosen td { background: rgba(70, 167, 88, .12); }
+  #routesPanel .tag { font-size: 11px; border: 1px solid var(--line); border-radius: 999px; padding: 1px 6px; margin-left: 4px; }
+  #routesPanel .note { color: var(--muted); font-size: 12px; margin-top: 8px; }
+  #watchBar { display: none; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 20px;
+              border-bottom: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+  #watchBar.show { display: flex; }
+  #watchBar .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  #watchBar.on .dot { background: var(--green); }
+  #watchBar b { color: inherit; }
+  #watchBar button { font-size: 12px; padding: 4px 10px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><h1>TripOwner</h1><span>owns the trip until you arrive</span></div>
+  <div class="badges" id="badges"></div>
+  <div class="controls">
+    <select id="agent">
+      <option value="agent">Agent (rules)</option>
+      <option value="llm">Agent (Nemotron)</option>
+      <option value="baseline">Baseline human</option>
+    </select>
+    <select id="scenario">
+      <option value="demo">Stage demo</option>
+      <option value="cabs_fail">Stage demo: cabs keep failing</option>
+      <option value="night">Safety demo: late night, cab stops</option>
+      <option value="random">Random chaos</option>
+      <option value="calendar">My calendar (next meeting)</option>
+    </select>
+    <select id="driverLang" title="Stage demo: the calling driver's language">
+      <option value="kn-IN">Driver: Kannada</option>
+      <option value="hi-IN">Driver: Hindi</option>
+      <option value="en-IN">Driver: English</option>
+    </select>
+    <select id="rides" title="How TripOwner books the simulated ride">
+      <option value="app">Rides: simulated app</option>
+      <option value="beckn">Rides: Namma Yatri over Beckn (mock network)</option>
+    </select>
+    <select id="speed">
+      <option value="1.5">Slow</option>
+      <option value="0.8" selected>Normal</option>
+      <option value="0.25">Fast</option>
+    </select>
+    <button class="primary" id="runBtn">Run trip</button>
+    <button id="stopBtn">Stop</button>
+    <button id="liveBtn" title="Talk to TripOwner as the driver: nothing is scripted">📞 Live call</button>
+    <button id="callMeBtn" title="Real phone test: Twilio rings your phone (PHONE_TEST_TO) and TripOwner answers you as the driver">📲 Call me</button>
+    <button id="locBtn" title="Share your real location so SOS alerts can include it">📍 Share location</button>
+    <button id="guardBtn" title="On a real cab ride: watch your phone's GPS and check on you if it stops moving">🚕 I'm in a cab</button>
+    <button id="sosBtn" title="Alert your emergency contacts now">SOS</button>
+  </div>
+</header>
+
+<div id="watchBar">
+  <span class="dot"></span>
+  <span><b>Watch my calendar</b>: <span id="watchStatus">off</span></span>
+  <span id="watchNext"></span>
+  <button id="watchToggle">Turn on</button>
+  <button id="watchCheck">Check now</button>
+  <button id="watchForce" title="Start owning the next meeting's trip right away (real clock)">Start next trip now</button>
+</div>
+
+<main>
+  <section class="panel" id="livePanel" style="grid-column: 1 / -1">
+    <h2>Live call: you play the driver <span style="color:var(--muted);font-weight:400">· nothing is scripted</span></h2>
+    <div class="bar">
+      <select id="liveLang"><option value="hi-IN">Driver speaks Hindi</option><option value="kn-IN">Driver speaks Kannada</option>
+        <option value="en-IN">Driver speaks English</option></select>
+      <select id="livePersona">
+        <option value="you">I'll be the driver (mic or type)</option>
+        <option value="cash">AI driver: tries to get you to pay cash</option>
+        <option value="extra">AI driver: asks for extra money (AC, night, "far area")</option>
+        <option value="lost">AI driver: can't find you</option>
+        <option value="impatient">AI driver: impatient, wants you on the main road</option>
+        <option value="chatty">AI driver: friendly and chatty</option>
+      </select>
+      <button class="primary" id="liveStart">Start call</button>
+      <button id="liveEnd">End call</button>
+      <span id="liveStatus"></span>
+    </div>
+    <div id="liveLog"></div>
+    <div class="bar" id="liveInput">
+      <button id="micBtn">🎤 Hold to talk</button>
+      <input id="liveText" placeholder="…or type what the driver says (any language), then Enter">
+      <button id="liveSend">Send</button>
+    </div>
+  </section>
+  <section class="panel" id="routesPanel" style="grid-column: 1 / -1">
+    <h2>Night route options <span id="routesWhen" style="color:var(--muted);font-weight:400"></span></h2>
+    <div id="routesBody"></div>
+    <div class="note" id="routesNote"></div>
+  </section>
+  <section class="panel" id="tripPanel">
+    <h2>Trip</h2>
+    <div class="clock" id="clock">--:--</div>
+    <div class="meeting" id="meeting"><span class="empty" style="padding:0">Press “Run trip”.</span></div>
+    <dl class="kv">
+      <dt>Leave by</dt><dd id="leaveBy">—</dd>
+      <dt>Ride</dt><dd id="rideStatus">—</dd>
+      <dt>Driver</dt><dd id="driver">—</dd>
+      <dt>ETA</dt><dd id="eta">—</dd>
+      <dt>Arriving</dt><dd id="arrival">—</dd>
+    </dl>
+    <div class="steps" id="steps"><div></div><div></div><div></div><div></div><div></div></div>
+    <div class="steps-label"><span>Plan</span><span>Booked</span><span>Driver</span><span>In car</span><span>There</span></div>
+    <div id="banner"></div>
+    <h2 style="margin-top:20px">Agent log</h2>
+    <ul id="timeline"></ul>
+  </section>
+
+  <section class="panel">
+    <h2>Driver conversation <span id="langTag"></span></h2>
+    <div id="callBar"><span class="pulse"></span><span id="callText"></span>
+      <button id="takeoverBtn">Take over the call</button>
+      <label style="display:flex;gap:4px;align-items:center;cursor:pointer"><input type="checkbox" id="soundOn" checked> sound</label></div>
+    <div id="chat"><div class="empty">Driver calls and messages appear here, original language with the translation underneath.</div></div>
+  </section>
+
+  <section class="panel" id="evalPanel">
+    <h2>Chaos eval</h2>
+    <p style="margin:0 0 10px;color:var(--muted)">The same random trips with cancellations, jams, stalled drivers, lost drivers and reschedules: agent vs a typical rider.</p>
+    <button id="evalBtn">Run 100-trip eval</button>
+    <div id="evalOut"></div>
+  </section>
+</main>
+
+<div id="modal"><div class="card">
+  <h3 id="modalTitle">Approve booking?</h3>
+  <div id="modalText"></div>
+  <div class="row"><button id="declineBtn">Decline</button><button class="primary" id="approveBtn">Approve</button></div>
+</div></div>
+
+<div id="safetyModal">
+  <div class="card">
+    <h3>Are you OK?</h3>
+    <div id="safetyText"></div>
+    <div style="color:var(--muted);margin-top:8px">If you don't answer in <b id="safetyCount">60</b>s, your emergency contacts are alerted.</div>
+    <div class="row">
+      <button class="big" id="safetyOk">I'm OK</button>
+      <button class="big" id="safetyHelp">I need help</button>
+    </div>
+    <a id="call112" href="tel:112">📞 Call 112 (emergency)</a>
+  </div>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const LANG = { "kn-IN": "Kannada", "hi-IN": "Hindi", "en-IN": "English" };
+const STATUS = { searching: "Finding a driver", assigned: "Driver on the way", arrived: "Driver arrived",
+                 in_trip: "In the car", completed: "Arrived", cancelled: "Cancelled", no_drivers: "No drivers" };
+let lastStatus = {}, pendingApproval = null, blockNext = null;
+
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+function log(ts, html, cls = "") {
+  const li = document.createElement("li");
+  li.innerHTML = `<span class="t">${esc(ts || "")}</span><span class="${cls}">${html}</span>`;
+  $("timeline").prepend(li);
+}
+
+function setSteps(n) { [...$("steps").children].forEach((d, i) => d.classList.toggle("on", i < n)); }
+
+function resetRoutes() { $("routesPanel").classList.remove("show"); $("routesBody").innerHTML = ""; routeId = null; }
+function reset() {
+  resetRoutes();
+  $("callBar").className = ""; $("callText").textContent = "";
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  speechQueue = Promise.resolve();
+  $("timeline").innerHTML = ""; $("chat").innerHTML = ""; $("banner").innerHTML = "";
+  ["leaveBy", "rideStatus", "driver", "eta", "arrival"].forEach(id => $(id).textContent = "—");
+  lastStatus = {}; setSteps(0); $("langTag").textContent = "";
+}
+
+function chat(e) {
+  const box = $("chat");
+  if (box.querySelector(".empty")) box.innerHTML = "";
+  const div = document.createElement("div");
+  div.className = `bubble ${e.sender}`;
+  const who = e.sender === "driver" ? (e.spoken ? "Driver (on the call)" : "Driver")
+            : e.sender === "agent" ? (e.spoken ? "TripOwner (speaking)" : "TripOwner")
+            : e.sender === "suggestion" ? "Suggested reply (not said)" : "You";
+  if (e.spoken) speak(e);
+  const lang = LANG[e.lang] || e.lang;
+  const audio = e.audio ? `<button data-audio="1">▶ play</button>` : "";
+  const nativeFirst = e.sender === "driver" || e.lang !== "en-IN";
+  const main = e.sender === "driver" ? e.text : (e.lang === "en-IN" ? e.text_en : e.text);
+  const sub = e.lang === "en-IN" ? "" : (e.sender === "driver" ? `→ ${e.text_en}` : `“${e.text_en}”`);
+  div.innerHTML = `<div class="meta"><b>${who}</b><span>${esc(e.ts)} · ${esc(lang)}</span>${audio}</div>
+    <div class="native">${esc(nativeFirst ? main : e.text_en)}</div>${sub ? `<div class="en">${esc(sub)}</div>` : ""}`;
+  if (blockNext && e.sender === "agent") {
+    div.classList.add("blocked");
+    div.insertAdjacentHTML("beforeend", `<div class="en" style="color:var(--red)">🛡 rewritten — draft contained private info: “${esc(blockNext)}”</div>`);
+    blockNext = null;
+  }
+  if (e.audio) div.querySelector("button").onclick = () => new Audio("data:audio/wav;base64," + e.audio).play();
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  if (e.sender === "driver") $("langTag").textContent = `· ${lang}`;
+  if (e.audio && e.sender === "driver") new Audio("data:audio/wav;base64," + e.audio).play().catch(() => {});
+}
+
+function onState(s) {
+  $("clock").textContent = s.now;
+  if (s.plan) $("leaveBy").textContent = `${s.plan.leave_by}  (book ${s.plan.book_at}, ${s.plan.travel_min} min drive)`;
+  const late = s.minutes_late;
+  const chip = late <= 0 ? `<span class="chip ok">${-late} min early</span>`
+            : late < 5 ? `<span class="chip warn">${late} min late</span>` : `<span class="chip late">${late} min late</span>`;
+  $("arrival").innerHTML = `${s.projected_arrival} ${chip}`;
+  if (s.mode && s.mode !== "cab") {
+    const name = s.mode === "metro" ? "Metro" : "Bike taxi";
+    $("rideStatus").textContent = `${name} · on the way`;
+    $("driver").textContent = "—";
+    $("eta").textContent = `arrive ~${s.projected_arrival}`;
+    setSteps(4);
+    return;
+  }
+  const r = s.ride;
+  if (!r) { setSteps(1); return; }
+  $("rideStatus").textContent = `${r.id} · ${STATUS[r.status] || r.status}`;
+  $("driver").textContent = r.driver ? `${r.driver} · ${LANG[r.driver_language] || ""}` : "—";
+  $("eta").textContent = r.status === "in_trip" ? `${r.trip_eta_min} min to destination`
+                       : r.pickup_eta_min != null && r.status === "assigned" ? `pickup in ${r.pickup_eta_min} min` : "—";
+  setSteps({ searching: 2, assigned: 3, arrived: 3, in_trip: 4, completed: 5 }[r.status] || 1);
+}
+
+function handle(e) {
+  switch (e.kind) {
+    case "run_started":
+      reset();
+      $("meeting").innerHTML = `<b>${esc(e.scenario.meeting)}</b> <span id="meetingWhen">at ${esc(e.scenario.start)}</span><br>
+        <span style="color:var(--muted)">${esc(e.scenario.from)} → ${esc(e.scenario.to)} · ${esc(e.agent)}</span>`;
+      log(e.ts, `Watching calendar. Trip handled by <b>${esc(e.agent)}</b>, voice: ${esc(e.voice)}`);
+      break;
+    case "state": onState(e); break;
+    case "plan": log(e.ts, `Plan: leave by <b>${e.leave_by}</b>, book at ${e.book_at} (${e.travel_min} min drive)`); break;
+    case "ride":
+      if (lastStatus[e.ride_id] !== e.status) {
+        lastStatus[e.ride_id] = e.status;
+        const d = e.driver ? ` — ${esc(e.driver.name)}, ${esc(e.driver.vehicle)} ${esc(e.driver.plate)}` : "";
+        const bad = ["cancelled", "no_drivers"].includes(e.status);
+        const why = e.reason ? ` (${esc(e.reason.replace("_", " "))})` : "";
+        log(e.ts, `${e.ride_id}: ${STATUS[e.status] || e.status}${why}${d}`, bad ? "guard" : e.status === "completed" ? "good" : "");
+      }
+      break;
+    case "agent_action":
+      if (e.action === "safety_checkin") { log(e.ts, `🛡 Safety check: ${esc(e.reason)}`, "guard"); break; }
+      if (e.action === "safety_answer") break;
+      if (e.action === "route_chosen") {
+        log(e.ts, `🛣 Route: <b>${esc(e.name)}</b> via ${esc(e.via)} (${esc(e.how)}) · ${e.minutes} min · score ${e.score} · longest stretch with nothing open ${e.gap_km} km`, "good");
+        markRoute(e.name); break;
+      }
+      if (e.action === "request_ride") log(e.ts, `Booked ${e.ride_id} · ₹${e.fare} · ${esc(e.reason)}`, "good");
+      else if (e.action === "cancel_ride") log(e.ts, `Cancelled ${e.ride_id}: ${esc(e.reason)}`);
+      else if (e.action === "no_action") log(e.ts, `No action: ${esc(e.reason)}`, "thought");
+      else if (e.action === "booking_declined") log(e.ts, "You declined the booking", "guard");
+      else if (e.action === "switch_mode") log(e.ts,
+        `🚇 Switched to ${e.mode === "metro" ? "the metro" : "a bike taxi"} (${esc(e.reason)}): arrive ~<b>${esc(e.eta)}</b>, ${e.gain_min} min sooner than by cab · ₹${e.fare}<br><span style="color:var(--muted)">${esc(e.steps)}</span>`, "good");
+      else if (e.action === "switch_declined") log(e.ts, "You chose to keep trying cabs", "guard");
+      break;
+    case "mode_arrived": log(e.ts, `Arrived by ${e.mode === "metro" ? "metro" : "bike taxi"}`, "good"); break;
+    case "agent_thought": log(e.ts, esc(e.text), "thought"); break;
+    case "agent_error": log(e.ts, `LLM error, rules took over: ${esc(e.error)}`, "guard"); break;
+    case "guardrail":
+      log(e.ts, `🛡 Guardrail: ${esc(e.detail)}${e.original ? ` — blocked “${esc(e.original)}”` : ""}`, "guard");
+      if (e.rule === "pii") blockNext = e.original;
+      break;
+    case "notify": {
+      const how = e.email_error ? ` <span style="color:var(--red,#e5484d)">(email failed: ${esc(e.email_error)})</span>`
+                : e.delivered_to ? (e.test_mode ? ` <span style="color:var(--muted)">(real email sent to you: test mode)</span>`
+                                                : ` <span style="color:var(--green)">(real email sent)</span>`) : "";
+      log(e.ts, `✉ Emailed ${e.to.length} attendees: “${esc(e.message)}”${how}`, "notify"); break;
+    }
+    case "meeting":
+      log(e.ts, e.cancelled ? "📅 Meeting cancelled" : `📅 Meeting moved ${e.old_start} → ${e.new_start}`, "notify");
+      if ($("meetingWhen")) $("meetingWhen").innerHTML = e.cancelled
+        ? `<s>at ${esc(e.old_start)}</s> <span style="color:var(--red, #e5484d)">cancelled</span>`
+        : `at ${esc(e.new_start)} <span style="color:var(--muted)">(was ${esc(e.old_start)})</span>`;
+      break;
+    case "chat": chat(e); break;
+    case "approval_request":
+      pendingApproval = e.id; $("modalText").textContent = e.summary; $("modal").classList.add("open");
+      $("modalTitle").textContent = e.details && e.details.mode ? "Switch to " + (e.details.mode === "metro" ? "the metro?" : "a bike taxi?")
+                                  : "Approve booking?";
+      log("", `Asked you: ${esc(e.summary)}`);
+      break;
+    case "approval_result":
+      $("modal").classList.remove("open"); pendingApproval = null;
+      log("", e.approved ? "You approved" : "You declined", e.approved ? "good" : "guard");
+      break;
+    case "result": {
+      const late = e.minutes_late;
+      let text, cls;
+      if (e.meeting_cancelled) { text = e.wasted_ride ? "Meeting cancelled — a ride was wasted" : "Meeting cancelled — no ride wasted"; cls = e.wasted_ride ? "late" : "ok"; }
+      else if (late == null) { text = "Didn't make it"; cls = "late"; }
+      else if (late <= 0) { text = `Arrived ${-late} min early`; cls = "ok"; }
+      else { text = `Arrived ${late} min late${e.warned_5min_ahead ? " — attendees were warned in advance" : ""}`; cls = e.warned_5min_ahead ? "warn" : "late"; }
+      const how = e.mode && e.mode !== "cab" ? ` · by ${e.mode === "metro" ? "metro" : "bike taxi"}` : "";
+      $("banner").innerHTML = `<div class="banner ${cls}">${text}${how} · ${e.bookings} booking(s) · you touched your phone ${e.user_actions}×</div>`;
+      if (late != null && late <= 0) setSteps(5);
+      break;
+    }
+    case "stopped": log("", "Stopped"); break;
+    case "phone": {
+      const p = { ringing: `📞 Your phone is ringing (forwarded, caller …${esc(e.caller || "")}): TripOwner is answering`,
+                  answered: "📞 TripOwner answered the call", ending: `📞 Hanging up (${esc(e.why || "")})`,
+                  ended: `📞 Call ended: ${esc(e.summary || "")}`, "driver too late": `⏱ ${esc(e.why || "")}`, error: `📞 Call problem: ${esc(e.error || "")}` };
+      log(e.ts || "", p[e.state] || "📞 " + esc(e.state), e.state === "error" ? "guard" : "good"); break;
+    }
+    case "beckn": log(e.ts, `<span style="color:var(--muted)">Beckn ${e.dir === "→" ? "→ Namma Yatri" : "← Namma Yatri"}</span> <b>${esc(e.action)}</b> ${esc(e.summary || "")}`); break;
+    case "watch": showWatch(e); break;
+    case "call_start":
+      $("callBar").className = "show"; $("takeoverBtn").style.display = "";
+      $("callText").innerHTML = `📞 <b>${esc(e.driver)}</b> (your driver) is calling. TripOwner answered for ${esc(e.rider)}.`;
+      log(e.ts, `📞 ${esc(e.driver)} called; TripOwner answered`, "good"); break;
+    case "call_takeover":
+      $("callText").innerHTML = `📞 You took over the call with <b>${esc(e.driver)}</b>. TripOwner only suggests replies now.`;
+      $("takeoverBtn").style.display = "none"; break;
+    case "call_end":
+      $("callBar").className = "show ended"; $("takeoverBtn").style.display = "none";
+      $("callText").innerHTML = `Call ended. <b>Summary:</b> ${esc(e.summary)}`;
+      log(e.ts, `📞 Call summary: ${esc(e.summary)}`, "good"); break;
+    case "route_choice": showRoutes(e); break;
+    case "gps_guard":
+      guardOn = e.active; $("guardBtn").textContent = e.active ? "🚕 Watching my GPS (stop)" : "🚕 I'm in a cab";
+      log("", e.active ? `🚕 Watching your GPS: a check-in if you don't move ${e.radius_m} m for ${e.stall_min} min` : "🚕 Stopped watching your GPS", "good");
+      break;
+    case "gps_stale": log("", `⚠ No location from your device for ${e.minutes} min: keep this page open with the screen on. If it stays silent, TripOwner checks on you and then alerts your contacts`, "guard"); break;
+    case "sos_call": {
+      const s = { queued: "dialling", ringing: "ringing", "in-progress": "answered, reading the alert",
+                  completed: `call finished (${e.duration || 0}s)`, busy: "busy", "no-answer": "didn't answer",
+                  failed: "call failed", canceled: "call cancelled" }[e.status] || e.status;
+      log("", `📞 Emergency call to ${esc(e.number)}: ${esc(s)}`, ["failed", "busy", "no-answer"].includes(e.status) ? "guard" : "good"); break;
+    }
+    case "sos_ack": log("", `✅ ${esc(e.name)} acknowledged the alert on ${esc(e.channel)}`, "good"); break;
+    case "safety_checkin": openSafety(e); break;
+    case "safety_answer": closeSafety();
+      log("", e.answer === "ok" ? "Rider said they're OK" : e.answer === "help" ? "🚨 Rider asked for help" : "🚨 No answer to the safety check", e.answer === "ok" ? "good" : "guard");
+      break;
+    case "sos_sent": {
+      const parts = Object.entries(e.results).map(([k, v]) => `${k}: ${esc(v)}`).join(" · ");
+      log("", `🚨 ${e.drill ? "DRILL alert" : "ALERT"} sent to emergency contacts (${parts})` +
+          (e.location ? `<br><a href="${esc(e.location)}" target="_blank">location (${esc(e.location_source)})</a>` : ""), "guard");
+      break;
+    }
+  }
+}
+
+function connect() {
+  const ws = new WebSocket(`${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws`);
+  ws.onmessage = (m) => handle(JSON.parse(m.data));
+  ws.onclose = () => setTimeout(connect, 1000);
+}
+
+async function health() {
+  try {
+    const h = await (await fetch("/api/health")).json();
+    $("badges").innerHTML = [
+      [`LLM: ${h.llm ? h.llm.split("/").pop() : "off (rules only)"}`, !!h.llm],
+      [`Voice: ${({sarvam: "Sarvam", nemotron: "Nemotron translate", pool: "driver pool"})[h.voice] || "offline phrasebook"}`,
+       h.voice === "sarvam" || h.voice === "nemotron"],
+      [`Calendar: ${h.calendar ? "yours (iCal)" : "demo"}`, h.calendar],
+      [`TTS: ${h.tts ? "Bulbul" : "off"}`, h.tts],
+    ].map(([t, live]) => `<span class="badge ${live ? "live" : ""}">${esc(t)}</span>`).join("");
+    if (!h.llm) $("agent").querySelector('[value="llm"]').disabled = true;
+    if (h.public_demo) {
+      const b = document.createElement("div");
+      b.style.cssText = "padding:8px 20px;background:#3a2e00;color:#ffd66b;font-size:13px;border-bottom:1px solid var(--line)";
+      b.textContent = "Public demo: rides are simulated, and emails, Telegram and SOS alerts are shown here but never actually sent." +
+        (h.llm_spend && h.llm_spend.daily_budget_usd ? " Nemotron has a daily budget; once it is used, the rule agent takes over." : "");
+      document.querySelector("header").after(b);
+    }
+    if (!h.calendar) $("scenario").querySelector('[value="calendar"]').disabled = true;
+    else { $("watchBar").classList.add("show"); showWatch(h.watch); }
+  } catch {}
+}
+
+// ---- live call -------------------------------------------------------------------------------
+let liveOn = false, liveAuto = false;
+function liveLine(who, native, en, cls) {
+  const d = document.createElement("div");
+  d.className = "ln " + cls;
+  d.innerHTML = `<div class="who">${esc(who)}</div><div>${esc(native)}</div>` + (en && en !== native ? `<div class="en">${esc(en)}</div>` : "");
+  $("liveLog").appendChild(d); $("liveLog").scrollTop = 1e9;
+}
+function liveStatus(t) { $("liveStatus").textContent = t || ""; }
+function sayAloud(x, sender) { speak({ ...x, sender, spoken: true }); return speechQueue; }
+async function liveReply(j) {
+  if (j.heard) liveLine("Driver (you)" + (j.heard.native !== j.heard.english ? "" : ""), j.heard.native, j.heard.english, "driver");
+  if (j.driver) { liveLine("Driver (AI)", j.driver.text, j.driver.text_en, "driver"); await sayAloud(j.driver, "driver"); }
+  if (j.reply) {
+    liveLine(`TripOwner (${j.reply.by}${j.reply.blocked ? ", guardrail rewrote it" : ""})`, j.reply.text, j.reply.text_en, "agent");
+    await sayAloud(j.reply, "agent");
+  }
+  if (j.summary || j.done) {
+    liveOn = false; liveAuto = false;
+    liveLine("Call ended", j.summary || "", "", "agent"); liveStatus("call ended");
+  }
+}
+async function liveSay(form) {
+  if (!liveOn) return alert("Start the call first");
+  liveStatus("TripOwner is listening…");
+  const r = await fetch("/api/livecall/say", { method: "POST", body: form });
+  const j = await r.json();
+  liveStatus("");
+  if (!r.ok) return liveStatus(j.detail || "Failed");
+  await liveReply(j);
+}
+async function liveAiLoop() {
+  while (liveOn && liveAuto) {
+    liveStatus("the AI driver is talking…");
+    const r = await fetch("/api/livecall/ai-turn", { method: "POST" });
+    const j = await r.json();
+    if (!r.ok) { liveStatus(j.detail || "Failed"); break; }
+    await liveReply(j);
+  }
+}
+$("liveBtn").onclick = () => $("livePanel").classList.toggle("show");
+$("liveStart").onclick = async () => {
+  $("liveLog").innerHTML = ""; liveStatus("calling…");
+  const persona = $("livePersona").value;
+  const r = await fetch("/api/livecall/start", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ lang: $("liveLang").value, persona }) });
+  const j = await r.json();
+  if (!r.ok) return liveStatus(j.detail || "Failed");
+  liveOn = true;
+  liveStatus(`📞 ${j.ride.driver} is calling about ${j.rider}'s pickup at ${j.pickup}` + (j.llm ? "" : " (no Nemotron: rule replies)"));
+  $("micBtn").disabled = !j.speech_input; $("micBtn").title = j.speech_input ? "" : "Speech input needs SARVAM_API_KEY; type instead";
+  liveLine("TripOwner answers", j.greeting.text, j.greeting.text_en, "agent");
+  await sayAloud(j.greeting, "agent");
+  $("liveInput").style.display = persona === "you" ? "" : "none";
+  if (persona !== "you") { liveAuto = true; liveAiLoop(); }
+};
+$("liveEnd").onclick = async () => {
+  liveAuto = false;
+  const r = await fetch("/api/livecall/end", { method: "POST" }); const j = await r.json();
+  if (liveOn) liveLine("Call ended", j.summary || "", "", "agent");
+  liveOn = false; liveStatus("call ended");
+};
+function sendTyped() {
+  const t = $("liveText").value.trim(); if (!t) return;
+  const f = new FormData(); f.append("text", t); $("liveText").value = ""; liveSay(f);
+}
+$("liveSend").onclick = sendTyped;
+$("liveText").addEventListener("keydown", e => { if (e.key === "Enter") sendTyped(); });
+
+// Hold-to-talk: record raw audio and send it as a 16 kHz mono WAV (works everywhere, no codecs needed).
+let rec = null;
+async function micDown() {
+  if (!liveOn || rec) return;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const src = ctx.createMediaStreamSource(stream);
+    const node = ctx.createScriptProcessor(4096, 1, 1);
+    const chunks = [];
+    node.onaudioprocess = ev => chunks.push(new Float32Array(ev.inputBuffer.getChannelData(0)));
+    src.connect(node); node.connect(ctx.destination);
+    rec = { stream, ctx, node, chunks, rate: ctx.sampleRate };
+    $("micBtn").classList.add("rec"); $("micBtn").textContent = "● Recording… release to send";
+  } catch (err) { alert("Microphone not available: " + err.message); }
+}
+function toWav(chunks, inRate) {
+  const len = chunks.reduce((a, c) => a + c.length, 0), data = new Float32Array(len);
+  let o = 0; for (const c of chunks) { data.set(c, o); o += c.length; }
+  const outRate = 16000, ratio = inRate / outRate, n = Math.floor(len / ratio), pcm = new Int16Array(n);
+  for (let i = 0; i < n; i++) { const v = Math.max(-1, Math.min(1, data[Math.floor(i * ratio)])); pcm[i] = v < 0 ? v * 0x8000 : v * 0x7fff; }
+  const buf = new ArrayBuffer(44 + pcm.length * 2), dv = new DataView(buf);
+  const w = (off, str) => [...str].forEach((ch, i) => dv.setUint8(off + i, ch.charCodeAt(0)));
+  w(0, "RIFF"); dv.setUint32(4, 36 + pcm.length * 2, true); w(8, "WAVE"); w(12, "fmt ");
+  dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, outRate, true);
+  dv.setUint32(28, outRate * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w(36, "data");
+  dv.setUint32(40, pcm.length * 2, true); new Int16Array(buf, 44).set(pcm);
+  return new Blob([buf], { type: "audio/wav" });
+}
+function micUp() {
+  if (!rec) return;
+  const r = rec; rec = null;
+  r.node.disconnect(); r.stream.getTracks().forEach(t => t.stop()); r.ctx.close();
+  $("micBtn").classList.remove("rec"); $("micBtn").textContent = "🎤 Hold to talk";
+  const seconds = r.chunks.reduce((a, c) => a + c.length, 0) / r.rate;
+  if (seconds < 0.6) return liveStatus("Hold the button while you speak");
+  const f = new FormData(); f.append("audio", toWav(r.chunks, r.rate), "driver.wav"); liveSay(f);
+}
+$("micBtn").addEventListener("mousedown", micDown); $("micBtn").addEventListener("mouseup", micUp);
+$("micBtn").addEventListener("mouseleave", micUp);
+$("micBtn").addEventListener("touchstart", e => { e.preventDefault(); micDown(); });
+$("micBtn").addEventListener("touchend", e => { e.preventDefault(); micUp(); });
+
+let speechQueue = Promise.resolve();
+function speak(e) {
+  if (!$("soundOn").checked) return;
+  speechQueue = speechQueue.then(() => new Promise(done => {
+    try {
+      if (e.audio) {                              // real voice (Sarvam) when a key is set
+        const a = new Audio("data:audio/wav;base64," + e.audio);
+        a.onended = done; a.onerror = done; a.play().catch(done);
+        return;
+      }
+      if (!("speechSynthesis" in window)) return done();
+      const voices = speechSynthesis.getVoices();
+      const hasLang = voices.some(v => v.lang && v.lang.replace("_", "-").toLowerCase().startsWith(e.lang.slice(0, 2)));
+      const u = new SpeechSynthesisUtterance(hasLang ? e.text : e.text_en);   // browser voice fallback
+      u.lang = hasLang ? e.lang : "en-IN";
+      u.rate = 1.05; u.onend = done; u.onerror = done;
+      speechSynthesis.speak(u);
+      setTimeout(done, 12000);                    // never let one line block the queue
+    } catch (err) { done(); }
+  }));
+}
+$("takeoverBtn").onclick = () => fetch("/api/call/takeover", { method: "POST" });
+
+let routeId = null, routeTimer = null;
+function showRoutes(e) {
+  routeId = e.id;
+  const rows = e.options.map(o => `<tr data-name="${esc(o.name)}">
+    <td><b>${esc(o.name)}</b>${o.badges.map(b => `<span class="tag">${esc(b)}</span>`).join("")}
+        ${o.name === e.recommended ? '<span class="tag" style="color:var(--green);border-color:var(--green)">recommended</span>' : ""}
+        <br><span style="color:var(--muted)">via ${esc(o.via)}</span></td>
+    <td>${o.minutes} min<br><span style="color:var(--muted)">${o.km} km · ${esc(o.traffic)}</span></td>
+    <td>${o.shops_open}/${o.shops_total}<br><span style="color:var(--muted)">open now</span></td>
+    <td>${o.longest_gap_km} km<br><span style="color:var(--muted)">${o.open_coverage_pct}% covered</span></td>
+    <td>${o.cctv}<br><span style="color:var(--muted)">${o.cctv_per_km}/km</span></td>
+    <td>${o.lit_pct >= 0 ? o.lit_pct + "%" : (o.lamps != null ? o.lamps + " lamps" : "—")}</td><td>${o.expressway_km} km</td><td><b>${o.score}</b></td>
+    <td><button class="pick" data-name="${esc(o.name)}">Choose</button></td></tr>`).join("");
+  $("routesBody").innerHTML = `<table><tr><th>Route</th><th>Time</th><th>Shops</th><th>Longest gap with nothing open</th>
+    <th>CCTV (mapped)</th><th>Lit</th><th>Expressway</th><th>Score</th><th></th></tr>${rows}</table>`;
+  $("routesPanel").classList.add("show");
+  const o0 = e.options[0] || {};
+  $("routesNote").textContent = o0.source && o0.source !== "simulated map data"
+    ? `Real data: routes from OSRM, places from OpenStreetMap (© OpenStreetMap contributors). Opening hours mapped for ~${o0.hours_known_pct}% of places on the first route; the rest are estimated from the kind of place. Times use typical traffic for the hour (no live traffic). CCTV and lighting only count where OpenStreetMap has data. Scores show how busy and visible a route is, not a guarantee of safety.`
+    : "Simulated map data: shops, cameras and lighting are generated. Scores show how busy and visible a route is, not a guarantee of safety.";
+  let left = Math.round(e.timeout_s);
+  const tick = () => { $("routesWhen").textContent = routeId ? `· pick one, or "${e.recommended}" in ${left}s` : ""; left = Math.max(0, left - 1); };
+  clearInterval(routeTimer); tick(); routeTimer = setInterval(tick, 1000);
+  document.querySelectorAll("#routesBody .pick").forEach(b => b.onclick = () => routeId && fetch(`/api/route/${routeId}`, {
+    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: b.dataset.name }) }));
+}
+function markRoute(name) {
+  routeId = null; clearInterval(routeTimer); $("routesWhen").textContent = `· taking ${name}`;
+  document.querySelectorAll("#routesBody tr[data-name]").forEach(tr => tr.classList.toggle("chosen", tr.dataset.name === name));
+  document.querySelectorAll("#routesBody .pick").forEach(b => b.remove());
+}
+
+let safetyId = null, safetyTimer = null;
+function openSafety(e) {
+  safetyId = e.id; $("safetyText").textContent = e.question;
+  let left = Math.round(e.timeout_s); $("safetyCount").textContent = left;
+  clearInterval(safetyTimer);
+  safetyTimer = setInterval(() => { left = Math.max(0, left - 1); $("safetyCount").textContent = left; }, 1000);
+  $("safetyModal").classList.add("open");
+}
+function closeSafety() { clearInterval(safetyTimer); $("safetyModal").classList.remove("open"); safetyId = null; }
+const answerSafety = (answer) => safetyId && fetch(`/api/safety/${safetyId}`, {
+  method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answer }) });
+$("safetyOk").onclick = () => answerSafety("ok");
+$("safetyHelp").onclick = () => answerSafety("help");
+$("sosBtn").onclick = async () => {
+  if (!confirm("Send an SOS alert to your emergency contacts now?")) return;
+  const r = await fetch("/api/sos", { method: "POST" }); const j = await r.json();
+  alert(r.ok ? "Alert sent: " + Object.entries(j.results).map(([k, v]) => k + ": " + v).join(", ") : (j.detail || "Failed"));
+};
+$("callMeBtn").onclick = async () => {
+  if (!confirm("Twilio will ring your phone now. Pick up and talk as the cab driver. Go?")) return;
+  const r = await fetch("/api/phone/call-me", { method: "POST" });
+  const j = await r.json();
+  alert(r.ok ? `Calling ${j.to}… pick up and play the driver.` : "Couldn't call: " + (j.detail || "failed"));
+};
+let guardOn = false;
+$("guardBtn").onclick = async () => {
+  let note = "", rehearsal = false, stall_min = null;
+  if (!guardOn) {
+    note = prompt("Starting a real cab ride? Optional: where to, and the cab's number plate (included in any alert).", "");
+    if (note === null) return;
+    // A test run: real alerts, labelled as a test, after 1 min without moving (or 1 min without location)
+    rehearsal = confirm("Is this a TEST run?\n\nOK: alerts go out for real but say it's a test, after 1 min still.\n"
+                        + "Cancel: a real ride (alerts are real).");
+    if (rehearsal) stall_min = 1;
+    if (locWatch === null) $("locBtn").click();          // the guard needs live location
+  }
+  const r = await fetch("/api/gps-guard", { method: "POST", headers: { "Content-Type": "application/json" },
+                                             body: JSON.stringify({ enabled: !guardOn, note, rehearsal, stall_min }) });
+  if (!r.ok) return alert((await r.json()).detail || "Failed");
+  keepAwake(!guardOn);
+};
+// Keep the screen on while the GPS is watched: a locked phone stops sharing its location.
+let wakeLock = null;
+async function keepAwake(on) {
+  try {
+    if (on && !wakeLock && navigator.wakeLock) wakeLock = await navigator.wakeLock.request("screen");
+    if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+  } catch (e) { log("", "⚠ Couldn't keep the screen on: keep this page open with the screen on", "guard"); }
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && guardOn) { wakeLock = null; keepAwake(true); }
+});
+let locWatch = null, lastFix = null, fixTimer = null;
+function sendFix() {
+  if (lastFix) fetch("/api/location", { method: "POST", headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify(lastFix) });
+}
+$("locBtn").onclick = () => {
+  if (locWatch !== null) {
+    navigator.geolocation.clearWatch(locWatch); locWatch = null; clearInterval(fixTimer); lastFix = null;
+    $("locBtn").textContent = "📍 Share location"; return;
+  }
+  if (!navigator.geolocation) return alert("This browser can't share location");
+  locWatch = navigator.geolocation.watchPosition(p => {
+    lastFix = { lat: p.coords.latitude, lon: p.coords.longitude };
+    sendFix();
+    $("locBtn").textContent = "📍 Sharing location";
+  }, err => { alert("Location not shared: " + err.message); locWatch = null; clearInterval(fixTimer); },
+     { enableHighAccuracy: true });
+  // Phones often stop reporting while standing still: re-send the last fix so "not moving" is seen as that,
+  // not as the phone going silent. If the page dies, this stops too, and the silence check takes over.
+  fixTimer = setInterval(sendFix, 20000);
+};
+
+let watchOn = false;
+function showWatch(w) {
+  if (!w) return;
+  watchOn = w.enabled;
+  $("watchBar").classList.toggle("on", w.enabled);
+  $("watchStatus").textContent = w.status + (w.last_poll ? ` (checked ${w.last_poll})` : "");
+  $("watchNext").innerHTML = w.active ? "" : (w.next
+    ? `· Next: <b>${esc(w.next.title)}</b>, ${esc(w.next.start)} → ${esc(w.next.to)}; trip starts ${esc(w.next.trip_starts)}` : "");
+  $("watchToggle").textContent = w.enabled ? "Turn off" : "Turn on";
+}
+async function watchCall(url, body) {
+  const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" },
+                               body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json();
+  if (!r.ok) alert(j.detail || "Failed"); else showWatch(j);
+}
+$("watchToggle").onclick = () => watchCall("/api/watch", { enabled: !watchOn });
+$("watchCheck").onclick = () => watchCall("/api/watch/check");
+$("watchForce").onclick = () => {
+  if (confirm("Start owning the trip to your next meeting now, on the real clock? (The ride is simulated.)"))
+    watchCall("/api/watch/check?force=true");
+};
+
+$("runBtn").onclick = async () => {
+  const body = { agent: $("agent").value, scenario: $("scenario").value, driver_lang: $("driverLang").value, rides: $("rides").value,
+                 seed: Math.floor(Math.random() * 10000), sec_per_min: parseFloat($("speed").value) };
+  const r = await fetch("/api/run", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!r.ok) alert((await r.json()).detail || "Failed to start");
+};
+
+$("stopBtn").onclick = () => fetch("/api/stop", { method: "POST" });
+const decide = (approved) => pendingApproval && fetch(`/api/approval/${pendingApproval}`, {
+  method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ approved }) });
+$("approveBtn").onclick = () => decide(true);
+$("declineBtn").onclick = () => decide(false);
+
+const SHOW = [
+  ["on_time_pct", "On time", "%", true], ["within_5_min_pct", "Within 5 min", "%", true],
+  ["avg_minutes_late", "Avg minutes late", "", false], ["worst_minutes_late", "Worst lateness", " min", false],
+  ["late_and_warned_5min_ahead_pct", "Late & warned ≥5 min ahead", "%", true],
+  ["pii_leaks", "Phone number leaked", "", false], ["avg_user_actions", "Times you touched your phone", "", false],
+  ["missed_meeting", "Missed meetings", "", false],
+];
+$("evalBtn").onclick = async () => {
+  $("evalBtn").disabled = true; $("evalOut").innerHTML = `<p class="empty">Running 100 trips × 2…</p>`;
+  try {
+    const rep = await (await fetch("/api/eval?trips=100&seed=42")).json();
+    const a = rep.summary.agent, b = rep.summary.baseline;
+    const fmt = (v, u) => v == null ? "—" : `${v}${u}`;
+    const rows = SHOW.map(([k, label, u, higher]) => {
+      const aw = a[k] != null && b[k] != null && (higher ? a[k] > b[k] : a[k] < b[k]);
+      const bw = a[k] != null && b[k] != null && (higher ? b[k] > a[k] : b[k] < a[k]);
+      return `<tr><td>${label}</td><td class="${aw ? "win" : ""}">${fmt(a[k], u)}</td><td class="${bw ? "win" : ""}">${fmt(b[k], u)}</td></tr>`;
+    }).join("");
+    const bar = (label, v, color) => `<div><div class="bar-label"><span>${label}</span><span>${v}%</span></div>
+      <div class="bar"><i style="width:${v}%;background:${color}"></i></div></div>`;
+    $("evalOut").innerHTML = `
+      <div class="bars">${bar("TripOwner on time", a.on_time_pct, "var(--accent)")}${bar("Typical rider on time", b.on_time_pct, "var(--muted)")}</div>
+      <table><thead><tr><th>${rep.trips} trips, seed ${rep.seed}</th><th>Agent</th><th>Baseline</th></tr></thead><tbody>${rows}</tbody></table>
+      <p style="margin:12px 0 4px;color:var(--muted);font-size:12px">Baseline assumptions:</p>
+      <ul class="assume">${rep.baseline_assumptions.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+  } catch (err) { $("evalOut").innerHTML = `<p class="empty">Eval failed: ${esc(err)}</p>`; }
+  $("evalBtn").disabled = false;
+};
+
+health(); connect();
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Render Blueprint: the public, judge-safe demo of TripOwner.
+# New -> Blueprint -> this repo. Render asks for LLM_API_KEY (your Token Factory key); everything else is set here.
+services:
+  - type: web
+    name: tripowner
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PUBLIC_DEMO              # never send real email / Telegram / alerts; no personal calendar
+        value: "1"
+      - key: LLM_DAILY_BUDGET_USD     # cap Nemotron spend per day; the rule agent takes over after
+        value: "0.5"
+      - key: LLM_BASE_URL
+        value: https://api.tokenfactory.nebius.com/v1/
+      - key: LLM_MODEL
+        value: nvidia/nemotron-3-super-120b-a12b
+      - key: LLM_API_KEY              # entered in Render's dashboard, never committed
+        sync: false
+      - key: SARVAM_DAILY_CHARS       # cap Sarvam (translation + voices) per day on the public demo
+        value: "15000"

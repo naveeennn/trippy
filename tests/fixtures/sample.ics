@@ -1,0 +1,43 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+BEGIN:VEVENT
+UID:past-1@google.com
+DTSTART:20261020T043000Z
+SUMMARY:Yesterday's standup
+LOCATION:Koramangala
+END:VEVENT
+BEGIN:VEVENT
+UID:allday-1@google.com
+DTSTART;VALUE=DATE:20261023
+SUMMARY:Holiday
+END:VEVENT
+BEGIN:VEVENT
+UID:zoom-1@google.com
+DTSTART:20261023T033000Z
+SUMMARY:Online sync
+LOCATION:https://zoom.us/j/123
+END:VEVENT
+BEGIN:VEVENT
+UID:cancel-1@google.com
+DTSTART:20261023T040000Z
+SUMMARY:Cancelled review
+LOCATION:HSR Layout
+STATUS:CANCELLED
+END:VEVENT
+BEGIN:VEVENT
+UID:client-1@google.com
+DTSTART:20261023T050000Z
+SUMMARY:Client demo\, round 2
+LOCATION:WeWork Prestige Atlanta\, 80 Feet Road\, Koramang
+ ala\, Bengaluru
+ATTENDEE;CN=Priya;ROLE=REQ-PARTICIPANT:mailto:priya@example.com
+ATTENDEE;CN=Rahul:mailto:rahul@example.com
+END:VEVENT
+BEGIN:VEVENT
+UID:tzid-1@google.com
+DTSTART;TZID=Asia/Kolkata:20261023T160000
+SUMMARY:Design review
+LOCATION:Whitefield Tech Park
+END:VEVENT
+END:VCALENDAR

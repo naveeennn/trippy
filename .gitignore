@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.pytest_cache/
+results/
+.tools/
+demo_video/narration.wav
+demo_video/music.wav
+demo_video/sfx.wav
+demo_video/still_*.png
+demo_video/sheet_*.png

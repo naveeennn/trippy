@@ -1,0 +1,118 @@
+[
+ {
+  "t": 0.8,
+  "at": "21:16:00",
+  "event": "server",
+  "channels": [
+   "telegram",
+   "phone call",
+   "email"
+  ],
+  "public_demo": false
+ },
+ {
+  "t": 2.2,
+  "at": "21:16:02",
+  "event": "route",
+  "source": "OSRM / OpenStreetMap",
+  "name": "Inner Ring Road",
+  "km": 6.0,
+  "fixes": 290
+ },
+ {
+  "t": 5.3,
+  "at": "21:16:05",
+  "event": "gps_guard",
+  "active": true,
+  "points": 0,
+  "note": "safety proof run: Indiranagar -> Koramangala",
+  "last_fix": null,
+  "stall_min": 1.0,
+  "radius_m": 60.0
+ },
+ {
+  "t": 5.3,
+  "at": "21:16:05",
+  "event": "phase",
+  "phase": "driving: 20 fixes, every 3s, ~25 km/h on real roads"
+ },
+ {
+  "t": 65.6,
+  "at": "21:17:05",
+  "event": "phase",
+  "phase": "parked at 12.97499,77.64108: same spot with +/-10 m GPS jitter, nobody answers"
+ },
+ {
+  "t": 125.3,
+  "at": "21:18:05",
+  "event": "safety_checkin",
+  "id": "S1",
+  "question": "You haven't moved for 1 min during your cab ride",
+  "timeout_s": 60.0
+ },
+ {
+  "t": 185.8,
+  "at": "21:19:05",
+  "event": "safety_answer",
+  "id": "S1",
+  "answer": "timeout"
+ },
+ {
+  "t": 195.4,
+  "at": "21:19:15",
+  "event": "sos_sent",
+  "reason": "didn't answer a safety check after not moving for 1 min during a cab ride",
+  "drill": true,
+  "results": {
+   "telegram": "sent to 1 contact(s)",
+   "phone call": "calling +91…515",
+   "email": "emailed 1 contact(s)"
+  },
+  "location": "https://maps.google.com/?q=12.97506,77.64104",
+  "location_source": "live (shared from your device)"
+ },
+ {
+  "t": 196.9,
+  "at": "21:19:16",
+  "event": "sos_call",
+  "number": "+91…515",
+  "status": "ringing",
+  "sid": "CA3a17d8363bcd6a602484abaa163a871a",
+  "duration": "0"
+ },
+ {
+  "t": 200.3,
+  "at": "21:19:20",
+  "event": "sos_call",
+  "number": "+91…515",
+  "status": "in-progress",
+  "sid": "CA3a17d8363bcd6a602484abaa163a871a",
+  "duration": "0"
+ },
+ {
+  "t": 204.1,
+  "at": "21:19:23",
+  "event": "sos_call",
+  "number": "+91…515",
+  "status": "completed",
+  "sid": "CA3a17d8363bcd6a602484abaa163a871a",
+  "duration": "6"
+ },
+ {
+  "t": 207.7,
+  "at": "21:19:27",
+  "event": "gps_guard",
+  "active": false,
+  "points": 47,
+  "note": "safety proof run: Indiranagar -> Koramangala",
+  "last_fix": "21:19:22",
+  "stall_min": 1.0,
+  "radius_m": 60.0
+ },
+ {
+  "t": 208.7,
+  "at": "21:19:28",
+  "event": "verdict",
+  "result": "PASS"
+ }
+]

@@ -1,0 +1,83 @@
+[
+ {
+  "t": 0.5,
+  "at": "19:18:46",
+  "event": "server",
+  "channels": [
+   "telegram",
+   "email"
+  ],
+  "public_demo": false
+ },
+ {
+  "t": 1.6,
+  "at": "19:18:47",
+  "event": "route",
+  "source": "OSRM / OpenStreetMap",
+  "name": "Inner Ring Road",
+  "km": 6.0,
+  "fixes": 290
+ },
+ {
+  "t": 4.6,
+  "at": "19:18:50",
+  "event": "gps_guard",
+  "active": true,
+  "points": 0,
+  "note": "safety proof run: Indiranagar -> Koramangala",
+  "last_fix": null,
+  "stall_min": 1.0,
+  "radius_m": 60.0
+ },
+ {
+  "t": 4.6,
+  "at": "19:18:50",
+  "event": "phase",
+  "phase": "driving: 20 fixes, every 3s, ~25 km/h on real roads"
+ },
+ {
+  "t": 64.9,
+  "at": "19:19:51",
+  "event": "phase",
+  "phase": "parked; the rider will answer 'ok'"
+ },
+ {
+  "t": 124.7,
+  "at": "19:20:50",
+  "event": "safety_checkin",
+  "id": "S1",
+  "question": "You haven't moved for 1 min during your cab ride",
+  "timeout_s": 60.0
+ },
+ {
+  "t": 127.7,
+  "at": "19:20:53",
+  "event": "rider_answered",
+  "answer": "ok",
+  "status": 200
+ },
+ {
+  "t": 127.7,
+  "at": "19:20:53",
+  "event": "safety_answer",
+  "id": "S1",
+  "answer": "ok"
+ },
+ {
+  "t": 152.1,
+  "at": "19:21:18",
+  "event": "gps_guard",
+  "active": false,
+  "points": 33,
+  "note": "safety proof run: Indiranagar -> Koramangala",
+  "last_fix": "19:20:53",
+  "stall_min": 1.0,
+  "radius_m": 60.0
+ },
+ {
+  "t": 153.1,
+  "at": "19:21:19",
+  "event": "verdict",
+  "result": "PASS"
+ }
+]

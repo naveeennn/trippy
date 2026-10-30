@@ -1,0 +1,90 @@
+[
+ {
+  "t": 0.5,
+  "at": "19:09:30",
+  "event": "server",
+  "channels": [
+   "telegram",
+   "email"
+  ],
+  "public_demo": false
+ },
+ {
+  "t": 1.8,
+  "at": "19:09:32",
+  "event": "route",
+  "source": "OSRM / OpenStreetMap",
+  "name": "Inner Ring Road",
+  "km": 6.0,
+  "fixes": 290
+ },
+ {
+  "t": 4.9,
+  "at": "19:09:35",
+  "event": "gps_guard",
+  "active": true,
+  "points": 0,
+  "note": "safety proof run: Indiranagar -> Koramangala",
+  "last_fix": null,
+  "stall_min": 1.0,
+  "radius_m": 60.0
+ },
+ {
+  "t": 4.9,
+  "at": "19:09:35",
+  "event": "phase",
+  "phase": "driving: 20 fixes, every 3s, ~25 km/h on real roads"
+ },
+ {
+  "t": 65.1,
+  "at": "19:10:35",
+  "event": "phase",
+  "phase": "parked at 12.97499,77.64108: same spot with +/-10 m GPS jitter, nobody answers"
+ },
+ {
+  "t": 125.0,
+  "at": "19:11:35",
+  "event": "safety_checkin",
+  "id": "S1",
+  "question": "You haven't moved for 1 min during your cab ride",
+  "timeout_s": 60.0
+ },
+ {
+  "t": 185.2,
+  "at": "19:12:35",
+  "event": "safety_answer",
+  "id": "S1",
+  "answer": "timeout"
+ },
+ {
+  "t": 191.5,
+  "at": "19:12:41",
+  "event": "sos_sent",
+  "reason": "didn't answer a safety check after not moving for 1 min during a cab ride",
+  "drill": true,
+  "results": {
+   "telegram": "sent to 1 contact(s)",
+   "phone call": "not set up",
+   "email": "emailed 1 contact(s)"
+  },
+  "location": "https://maps.google.com/?q=12.97506,77.64104",
+  "location_source": "live (shared from your device)"
+ },
+ {
+  "t": 195.3,
+  "at": "19:12:45",
+  "event": "gps_guard",
+  "active": false,
+  "points": 45,
+  "note": "safety proof run: Indiranagar -> Koramangala",
+  "last_fix": "19:12:40",
+  "stall_min": 1.0,
+  "radius_m": 60.0
+ },
+ {
+  "t": 196.3,
+  "at": "19:12:46",
+  "event": "verdict",
+  "result": "PASS"
+ }
+]

@@ -1,0 +1,107 @@
+[
+ {
+  "t": 4.9,
+  "at": "15:47:35",
+  "event": "phone",
+  "state": "calling you",
+  "caller": "…"
+ },
+ {
+  "t": 4.9,
+  "at": "15:47:35",
+  "event": "call_placed",
+  "status": 200,
+  "ok": true,
+  "to": "+91…515"
+ },
+ {
+  "t": 14.6,
+  "at": "15:47:44",
+  "event": "phone",
+  "state": "ringing",
+  "caller": "8034"
+ },
+ {
+  "t": 14.6,
+  "at": "15:47:44",
+  "event": "phone",
+  "state": "answered",
+  "lang": "en-IN"
+ },
+ {
+  "t": 14.6,
+  "at": "15:47:44",
+  "event": "chat",
+  "sender": "agent",
+  "text": "Hello, this is jishnu's assistant. jishnu can't take the call right now. Are you the cab driver?",
+  "text_en": "Hello, this is jishnu's assistant. jishnu can't take the call right now. Are you the cab driver?",
+  "lang": "en-IN",
+  "spoken": true
+ },
+ {
+  "t": 38.4,
+  "at": "15:48:08",
+  "event": "chat",
+  "sender": "driver",
+  "text": "I am the kya driver",
+  "text_en": "I am the kya driver",
+  "lang": "en-IN",
+  "spoken": true
+ },
+ {
+  "t": 40.8,
+  "at": "15:48:11",
+  "event": "chat",
+  "sender": "agent",
+  "text": "Sorry, I didn't catch that. Are you the cab driver?",
+  "text_en": "Sorry, I didn't catch that. Are you the cab driver?",
+  "lang": "en-IN",
+  "spoken": true
+ },
+ {
+  "t": 51.2,
+  "at": "15:48:21",
+  "event": "chat",
+  "sender": "driver",
+  "text": "I am yes, I am the cab driver.",
+  "text_en": "I am yes, I am the cab driver.",
+  "lang": "en-IN",
+  "spoken": true
+ },
+ {
+  "t": 54.1,
+  "at": "15:48:24",
+  "event": "chat",
+  "sender": "agent",
+  "text": "Sure, jishnu will be waiting at Gate 2, Indiranagar Metro Station. Let me know if you need any help finding it.",
+  "text_en": "Sure, jishnu will be waiting at Gate 2, Indiranagar Metro Station. Let me know if you need any help finding it.",
+  "lang": "en-IN",
+  "spoken": true
+ },
+ {
+  "t": 71.5,
+  "at": "15:48:41",
+  "event": "chat",
+  "sender": "driver",
+  "text": "I'll be late by 5 minutes later today.",
+  "text_en": "I'll be late by 5 minutes later today.",
+  "lang": "en-IN",
+  "spoken": true
+ },
+ {
+  "t": 73.5,
+  "at": "15:48:43",
+  "event": "chat",
+  "sender": "agent",
+  "text": "Thanks for letting me know, jishnu will wait at Gate 2, Indiranagar Metro Station.",
+  "text_en": "Thanks for letting me know, jishnu will wait at Gate 2, Indiranagar Metro Station.",
+  "lang": "en-IN",
+  "spoken": true
+ },
+ {
+  "t": 305.0,
+  "at": "15:52:35",
+  "event": "timeout",
+  "detail": "no end of call within 300s"
+ }
+]

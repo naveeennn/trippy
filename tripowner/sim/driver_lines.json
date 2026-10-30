@@ -1,0 +1,366 @@
+{
+  "where": {
+    "kn-IN": [
+      {
+        "text": "GPS ನಲ್ಲಿ ನಿಮ್ಮ ಲೆಕ್ಟ್ನು ಕಂಡುಹೋಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸ್ಥಳವನ್ನು ಕ beteg Tribune keywords ನೀಡಿ.",
+        "en": "I couldn't locate your position on GPS. Please tell me where you are."
+      },
+      {
+        "text": "ನೀವು ಕೇವಲ ಆ Albion ರಸ್ತೆಯ ಕatience ಹೀಗಿದ್ದೀರಾ? ನಾನು ಹತ್ತಿರದ ಬಿಂದು ಕಂಡುಹೋಗಲಿಲ್ಲ.",
+        "en": "Are you just standing on Albion Road? I still can't find the point."
+      },
+      {
+        "text": "ನೀವು ಇದ್ದೆ genau engish ಅಲ್ಲದೆ, ನಾನು ನೋಡಲಿಲ್ಲ – ಎಲ್ಲಿ ಕಳೆಯಿದ್ದಿ?",
+        "en": "You're not speaking clear English—I didn't catch that—where did you go?"
+      },
+      {
+        "text": "ನೀವು ಈಗ ಯಾವ್‌ ಮೈಲ್‌­‑ಸ್ಟ್ರೀಟ್‌ನಲ್ಲಿ? ನಾನು ಹ niewielಲಿಲ್ಲ.",
+        "en": "Which mile street are you on right now? I have no idea."
+      },
+      {
+        "text": "ಎಲ್ಲಿ؟ ನನ್ನ ಮ್ಯಾಪ್ map‑show ಮಾಡುತ್ತಿಲ್ಲ, ನಿರ್ದೇಶನ Kodagu style ಗೆ ತಿಳಿಸಿ.",
+        "en": "Where? My map isn't showing—please give me directions in Kodagu style."
+      },
+      {
+        "text": "Hey macha, ninja exact spot yenu? Nanu thoorale kuda huytu illa.",
+        "en": "Hey dude, what's the exact spot? I couldn't even go far."
+      },
+      {
+        "text": "Bro, ninnappu GPS signal lost aagi, ninna address ellide helu bekku?",
+        "en": "Bro, my GPS signal got lost—can you tell me your address?"
+      }
+    ],
+    "hi-IN": [
+      {
+        "text": "भाई, मैं आपका पिन नहीं ढूंढ पा रहा हूँ, अभी आप कहाँ खड़े हो?",
+        "en": "Brother, I can't find your pin; where are you standing right now?"
+      },
+      {
+        "text": "अरे यार, GPS ने आपको दिखा ही नहीं, आप ठीक-ठाक लोकेशन बता सकते हो?",
+        "en": "Hey buddy, the GPS isn't showing you; can you tell me your exact location?"
+      },
+      {
+        "text": "सर, मैं स्टैंड के पास फँस गया हूँ, आपका बिल्डिंग नंबर या लैंडमार्क बता दिजिए?",
+        "en": "Sir, I'm stuck near the stand; please tell me your building number or landmark."
+      },
+      {
+        "text": "भाईसाहब, आपका मैप पर डॉट नहीं दिख रहा, कृपया स्ट्रीट नाम या नजदीकी चाय Stall बताइए।",
+        "en": "Brother sir, your dot isn't showing on the map; please tell me the street name or nearest tea stall."
+      },
+      {
+        "text": "सर, मैं आपके gebouw के सामने घूम रहा हूँ, कृपया floor या wing संख्या भेज दो?",
+        "en": "Sir, I'm wandering in front of your building; please send the floor or wing number."
+      },
+      {
+        "text": "भाई, आपका location pin गायब है, क्या आप nearby metro station या bus stop बता सकते हो?",
+        "en": "Brother, your location pin is missing; can you tell me the nearby metro station or bus stop?"
+      },
+      {
+        "text": "अरे यार, मैं आपको ढूँढ़ रहा हूँ लेकिन signals कमजोर हैं, कृपया landmark जैसे कि कोई बड़ी दुकान या मंदिर का नाम बताओ।",
+        "en": "Hey buddy, I'm trying to find you but the signals are weak; please tell me a landmark like a big shop or temple name."
+      },
+      {
+        "text": "Bhai, aap kahan ho? GPS dikh nahi raha.",
+        "en": "Brother/Bro, where are you? My GPS isn't showing."
+      }
+    ],
+    "en-IN": [
+      {
+        "text": "Yo, I’m at the landmark you gave but don’t see you anywhere—can you ping me the exact spot?",
+        "en": "Yo, I'm at the landmark you gave me, but I don't see you anywhere—can you send me the exact spot?"
+      },
+      {
+        "text": "Bro, I’m stuck near the signal, still can’t locate you—where exactly are you waiting?",
+        "en": "Bro, I'm stuck near the signal and still can't locate you—where exactly are you waiting?"
+      },
+      {
+        "text": "Hey sister, I’m outside the mall gate but you’re nowhere in sight—share your precise location please.",
+        "en": "Hey sister, I'm outside the mall gate but I don't see you—please share your precise location."
+      },
+      {
+        "text": "Arre yaar, I’ve circled the block twice, still no sign—tell me the building name or shop nearby?",
+        "en": "Arre yaar, I've circled the block twice and still see nothing—tell me the building name or a nearby shop."
+      },
+      {
+        "text": "Sir, I’m at the bus stop you mentioned, yet I don’t spot you—could you describe where you’re standing?",
+        "en": "Sir, I'm at the bus stop you mentioned, but I don't see you—could you describe where you're standing?"
+      },
+      {
+        "text": "Bhai, I’m near the metro exit, but you’re not visible—any landmark or shop close to you?",
+        "en": "Bhai, I'm near the metro exit, but I can't see you—any landmark or shop close to you?"
+      },
+      {
+        "text": "Hey, I’m parked near the traffic signal, still can’t find you—send me your live location or a quick description.",
+        "en": "Hey, I'm parked near the traffic signal and still can't find you—send me your live location or a quick description."
+      },
+      {
+        "text": "Hey yaar, I’m at your pickup point but can’t spot u—where r u exactly?",
+        "en": "Hey friend, I'm at your pickup location but I can't see you—where are you exactly?"
+      }
+    ]
+  },
+  "phone": {
+    "kn-IN": [
+      {
+        "text": "Hey, ride‑related, ನಿಮ್ಮ ಫೋನ್‌ ನಂಬರ್ ಕೇಳಬಲ್ಲಿ?",
+        "en": "Hey, about the ride, can I get your phone number?"
+      },
+      {
+        "text": "ನಿಮ್ಮ ಮೊಬೈಲ್ ನಂಬರ್‌ನನ್ನೆ ನೀಡokee?",
+        "en": "Could you share your mobile number?"
+      },
+      {
+        "text": "ಹಲೋ, ನಿಮ್ಮ mobile ನಂಬರ್ ಹೇಳಬಕಿ?",
+        "en": "Hello, can you tell me your mobile number?"
+      },
+      {
+        "text": "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪರ್ಸನಲ್ ಫೋನ್ ನಂಬರ್=tell me.",
+        "en": "Please tell me your personal phone number."
+      },
+      {
+        "text": "ನಿಮ್ಮ ಫೋನ್ ನಂಬರ್ ನೀಡಲಾರಾ? (Please)",
+        "en": "Can you give your phone number? (Please)"
+      },
+      {
+        "text": "ನಿಮ್ಮ cell ನಂಬರ್ hop? tell me pls.",
+        "en": "Tell me your cell number, please."
+      }
+    ],
+    "hi-IN": [
+      {
+        "text": "Bhaiya, app abhi slow chal raha hai... aapka personal number de dijiye na, bas ek minute ka kaam hai",
+        "en": "Brother, the app is running slow right now... Please give me your personal number, it will just take a minute."
+      },
+      {
+        "text": "Ji, Electronic City tak pahuchne mein der lag rahi hai... aapka number bataiye, waise hi batata hu kahan rukna hai",
+        "en": "Yes, I'm getting delayed reaching Electronic City... Please give me your number, then I'll let you know where to wait."
+      },
+      {
+        "text": "Aapka number de dijiye please, warna ride automatically cancel ho jaegi... thoda sa cooperation chahiye ji",
+        "en": "Please give me your number, otherwise the ride will be automatically cancelled... I need a little cooperation."
+      },
+      {
+        "text": "Swalpa thoda time lagega number lenge... app mein error aa raha hai, aapka personal number dena zaruri hai ji",
+        "en": "It will take a little time to get the number... The app is showing an error, providing your personal number is necessary."
+      },
+      {
+        "text": "Arre yaar, number nahi diye toh photo bhej do na! Thoda mazak thi... lekin seriously, aapka number chahiye ride track karne ke liye",
+        "en": "Hey buddy, if you don't give the number, send a photo! Just kidding... but seriously, I need your number to track the ride."
+      },
+      {
+        "text": "Aapki meherbani se, ek baar number de dijiye... sirf safety ke liye, promise nahi galat istemal karunga ji",
+        "en": "With your kindness, please give the number once... Only for safety, I promise I won't misuse it."
+      },
+      {
+        "text": "Number? Pls send fast... meter abhi se chalne wala hai, der nahi ho sakti",
+        "en": "Number? Please send it fast... the meter is about to start, there can't be any delay."
+      },
+      {
+        "text": "Bhaiya, aapka number nahi toh police se poochna padega later... thoda ji chahyega, de dijiye na!",
+        "en": "Brother, if you don't give the number, I'll have to ask the police later... Please cooperate a bit, give it!"
+      }
+    ],
+    "en-IN": [
+      {
+        "text": "Hey yaar, mind giving me your personal number? Might need to reach you quick.",
+        "en": "Hey buddy, could you give me your personal number? I might need to reach you quickly."
+      },
+      {
+        "text": "Boss, can you drop your mobile here so I can ping you if anything changes?",
+        "en": "Boss, can you give me your mobile number so I can contact you if anything changes?"
+      },
+      {
+        "text": "Namaste, please share your phone number for smooth coordination, thanks!",
+        "en": "Hello, please share your phone number so we can coordinate smoothly, thanks!"
+      },
+      {
+        "text": "Hey sister, could you tell me your contact number? Just in case we lose signal.",
+        "en": "Hey sister, could you tell me your contact number? Just in case we lose signal."
+      },
+      {
+        "text": "Bhaiya, apna number de do na, agar rasta mein kuch ho to call kar lunga.",
+        "en": "Brother, please give me your number; I'll call you if anything happens on the road."
+      },
+      {
+        "text": "Excuse me madam, may I have your personal mobile? It helps if we need to reconnect.",
+        "en": "Excuse me, ma'am, may I have your personal mobile number? It would be helpful if we need to get back in touch."
+      },
+      {
+        "text": "Hey friend, share your phone please, might need to update you on traffic.",
+        "en": "Hey friend, please share your phone number; I might need to update you about traffic."
+      },
+      {
+        "text": "Sir, apna contact number bhej dete ho? Thoda sa backup ke liye.",
+        "en": "Sir, could you send me your contact number? Just in case as a backup."
+      }
+    ]
+  },
+  "coming": {
+    "kn-IN": [
+      {
+        "text": "ಸರಿ, ನಿನ್ನ ಸಂದೇಶವನ್ನು ಕೇಳಿದ್ದೇನೆ. ಈಗ ಬಂದಿರುವತ್ತು.",
+        "en": "Okay, I've heard your message. I'm on my way now."
+      },
+      {
+        "text": "ಒಕೆ, ನಿನ್ನ ಮೆಸ್ಸ್ ಶ್ರವಣ ಮಾಡಿದೆ. ಈಗ ಹೋಗ್ತೀನಿ.",
+        "en": "Okay, your message has been heard. I'll go now."
+      },
+      {
+        "text": "ಸರಿ, ninna message got it. ಈಗ ನಿಮ್ಮ ಸ್ಥಳಕ್ಕೆ ಹೋಗುತ್ತಿದ್ದೇನೆ.",
+        "en": "Okay, I got your message. I'm heading to your location now."
+      }
+    ],
+    "hi-IN": [
+      {
+        "text": "ओके, समझ गया, निकल रहा हूँ।",
+        "en": "Okay, I understood, I'm leaving."
+      },
+      {
+        "text": "जी, आपका मैसेज पढ़ लिया, अब रास्ते पर हूँ।",
+        "en": "Yes, I read your message, now I'm on the road."
+      },
+      {
+        "text": "भैया, फँसा नहीं, आ रहा हूँ bas.",
+        "en": "Bro, I'm not stuck, I'm coming now."
+      },
+      {
+        "text": "Okay boss, samajh gaya, on my way.",
+        "en": "Okay boss, understood, on my way."
+      },
+      {
+        "text": "ठीक है, चल दिया।",
+        "en": "Alright, I've left."
+      },
+      {
+        "text": "हन जी, समझ गया, अब पहुँचने वाला हूँ।",
+        "en": "Yes sir, understood, I'm about to arrive."
+      },
+      {
+        "text": "सुन लीजिए, अब निकल पड़ा हूँ towards your location.",
+        "en": "Listen up, I have now set off towards your location."
+      }
+    ],
+    "en-IN": [
+      {
+        "text": "Gotcha, heading over now.",
+        "en": "Gotcha, heading over now."
+      },
+      {
+        "text": "Understood, be right there.",
+        "en": "Understood, be right there."
+      },
+      {
+        "text": "Chill yaar, main aa raha hoon.",
+        "en": "Take it easy, I'm on my way."
+      },
+      {
+        "text": "Copy that, moving towards you.",
+        "en": "Copy that, moving towards you."
+      },
+      {
+        "text": "Sahi hai, chalte hain.",
+        "en": "Alright, let's go."
+      },
+      {
+        "text": "Aye, samajh gaya – ab nikal raha hoon.",
+        "en": "Yeah, got it – I'm heading out now."
+      },
+      {
+        "text": "All good, driving your way now.",
+        "en": "All good, driving your way now."
+      },
+      {
+        "text": "Thik hai, ja raha hoon.",
+        "en": "Okay, I'm on my way."
+      }
+    ]
+  },
+  "arrived": {
+    "kn-IN": [
+      {
+        "text": "ನಾನು ಗೇಟ್‌ಹತ್ತಿರದಲ್ಲಿ ಓದಿದ್ದೇನೆ.",
+        "en": "I was waiting at the gate."
+      },
+      {
+        "text": "ಹಲ್ವೆ, ನಾನು ಗೇಟ್‌ಗೆ ಬಂದಿದ್ದೇನೆ, ನಿಮ್ಮ ಸಿಗೆ Waiting.",
+        "en": "Alright, I have come to the gate, waiting for your signal."
+      },
+      {
+        "text": "ನಾನು ಗೇಟ್‌ನ ಮುನ್ನ ನಿಂತಿದ್ದೇನೆ, ದಯವಿಟ್ಟು ನೋಡಿ.",
+        "en": "I was standing in front of the gate, please look."
+      },
+      {
+        "text": "ಸರಿ, ಗೇಟ್‌ ಹತ್ತಿರದಲ್ಲಿ ನಿಂತಿದ್ದೇನೆ, ನಿಮ್ಮ ಸಿಗೆ Waiting.",
+        "en": "Okay, I was standing at the gate, waiting for your signal."
+      }
+    ],
+    "hi-IN": [
+      {
+        "text": "मै आ गया हू, गेट के पास खड़ा हूँ।",
+        "en": "I have arrived, standing near the gate."
+      },
+      {
+        "text": "गेट के बाहर इंतजार कर रहा हूँ, आप बाहर आ जाइए।",
+        "en": "I am waiting outside the gate, please come out."
+      },
+      {
+        "text": "आ गया हूँ गेट के सामने, जब तैयार हो तो बताइए।",
+        "en": "I have arrived in front of the gate, let me know when you're ready."
+      },
+      {
+        "text": "गेट के पास parked हूँ, आपको देख रहा हूँ।",
+        "en": "I am parked near the gate, I can see you."
+      },
+      {
+        "text": "अरे भाई, मैं गेट के बाहर खड़ा हूँ, जल्दी निकलो।",
+        "en": "Hey brother, I'm standing outside the gate, hurry up and come out."
+      },
+      {
+        "text": "मैं यहाँ गेट के किनारे खड़ा हूँ, आप बाहर आएँ।",
+        "en": "I am standing here at the edge of the gate, please come out."
+      },
+      {
+        "text": "गेट के नज़दीक इंतजार कर रहा हूँ, कॉल कर दीजिये अगर कोई समस्या।",
+        "en": "I am waiting near the gate, call if there is any problem."
+      },
+      {
+        "text": "ओये, मैं गेट के पास खड़ा हूँ, अब बाहर आ जाओ।",
+        "en": "Hey, I am standing near the gate, now come out."
+      }
+    ],
+    "en-IN": [
+      {
+        "text": "I've reached Gate 5 and am waiting here - just let me know when you're ready.",
+        "en": "I've reached Gate 5 and am waiting here - just let me know when you're ready."
+      },
+      {
+        "text": "Parked near the side gate, Bhaiya - step out whenever you can.",
+        "en": "Parked near the side gate, brother — step out whenever you can."
+      },
+      {
+        "text": "Gate 2 ke baahar khada hoon, dekh le yaar.",
+        "en": "I'm standing outside Gate 2, take a look, buddy."
+      },
+      {
+        "text": "Yaar, I'm at the main entrance, waiting beside the security booth.",
+        "en": "Friend, I'm at the main entrance, waiting beside the security booth."
+      },
+      {
+        "text": "Arrived, standing close to Gate 7, call me if you don't see me.",
+        "en": "Arrived, standing close to Gate 7, call me if you don't see me."
+      },
+      {
+        "text": "Namaskara, cab is stationed near the back gate, come out when free.",
+        "en": "Hello, the cab is parked near the back gate, come out when you're free."
+      },
+      {
+        "text": "Just pulled up opposite Gate 1, waiting for you.",
+        "en": "Just pulled up opposite Gate 1, waiting for you."
+      },
+      {
+        "text": "Hey, I'm loitering by the gate area, ping me when you're stepping out.",
+        "en": "Hey, I'm loitering by the gate area, ping me when you're stepping out."
+      }
+    ]
+  }
+}
