@@ -384,8 +384,8 @@ Reproduce: `python -m tripowner.sim.eval --trips 200 --seed 42 --llm --driver po
   isn't limited to a phrasebook.
 - Model: `nvidia/nemotron-3-super-120b-a12b` via the OpenAI-compatible Token Factory API (`tripowner/llm.py`).
   Self-hosting it as a NIM on a Nebius GPU VM is documented in [docs/nebius_nim.md](docs/nebius_nim.md).
-- **Where Token Factory sped us up:** no GPUs to provision or models to host, so we went from the first call to a
-  tool-calling agent in an afternoon, using the standard OpenAI client. Pay-per-token pricing let us run the 30-trip
+- **Where Token Factory sped us up:** no GPUs to provision or models to host, and the standard OpenAI client worked
+  as is, so the model is one small module (`tripowner/llm.py`). Pay-per-token pricing let us run the 30-trip
   Nemotron eval for $0.087 and keep the public demo on Nemotron with a small daily budget. Because Super is fast
   enough for live use (median 1.6 s), the same model handles chat, cancellations, translation and live phone calls,
   so we never had to maintain a second model.
